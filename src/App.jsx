@@ -1,72 +1,5 @@
 import { useState } from "react"
-
-function Square ({value, onSquareClick}) {
-  return (
-    <button
-      className="square"
-      onClick={onSquareClick}
-    >
-      {value}
-    </button>
-  )
-}
-
-function BoardList({ squares, onHandleSquareClick }) {
-  const rows = 3
-  const cols = 3
-
-  return (
-    <div>
-      { Array(rows).fill().map((_, rowIndex) => (
-        <div key={rowIndex} className="board-row">
-          {
-            Array(cols).fill().map((_, colIndex) => {
-              const value = rowIndex * cols + colIndex
-
-              return (
-                <Square key={colIndex} value={squares[value]} onSquareClick={() => onHandleSquareClick(value)} />
-              )
-            })
-          }
-        </div>
-      ))}
-    </div>
-  )
-}
-
-function Board ({ areSquaresFilled, xIsNext, squares, onPlay }) {
-  const winner = calculateWinner(squares)
-  let status
-
-  if (winner) {
-    status = 'Winner: ' + winner
-  } else if (!winner && !areSquaresFilled) {
-    status = 'Next player: ' + (xIsNext ? 'X' : 'O')
-  } else {
-    status = 'Tie'
-  }
-
-  function handleSquareClick(i) {
-    if (squares[i] || calculateWinner(squares)) return
-
-    const nextSquares = squares.slice()
-
-    if (xIsNext) {
-      nextSquares[i] = 'X'
-    } else {
-      nextSquares[i] = 'O'
-    }
-
-    onPlay(nextSquares)
-  }
-
-  return (
-    <>
-      <div className="status">{status}</div>
-      <BoardList squares={squares} onHandleSquareClick={handleSquareClick} />
-    </>
-  )
-}
+import Board from "./Board"
 
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)])
@@ -85,7 +18,7 @@ export default function Game() {
     setCurrentMove(nextMove)
   }
 
-  const moves = history.map((squares, move) => {
+  const moves = history.map((_, move) => {
     let description
 
     if (move > 0) {
@@ -115,27 +48,4 @@ export default function Game() {
       </div>
     </div>
   )
-}
-
-function calculateWinner(squares) {
-  const lines = [
-    [0, 1, 2],
-    [3, 4, 5],
-    [6, 7, 8],
-    [0, 3, 6],
-    [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
-    [2, 4, 6]
-  ]
-
-  for (let i = 0; i < lines.length; i++) {
-    const [a, b, c] = lines[i]
-
-    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-      return squares[a]
-    }
-  }
-
-  return null
 }
