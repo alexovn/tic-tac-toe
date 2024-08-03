@@ -11,17 +11,42 @@ function Square ({value, onSquareClick}) {
   )
 }
 
-function Board ({ xIsNext, squares, onPlay }) {
+function BoardList({ squares, onHandleSquareClick }) {
+  const rows = 3
+  const cols = 3
+
+  return (
+    <div>
+      { Array(rows).fill().map((_, rowIndex) => (
+        <div key={rowIndex} className="board-row">
+          {
+            Array(cols).fill().map((_, colIndex) => {
+              const value = rowIndex * cols + colIndex
+
+              return (
+                <Square key={colIndex} value={squares[value]} onSquareClick={() => onHandleSquareClick(value)} />
+              )
+            })
+          }
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function Board ({ areSquaresFilled, xIsNext, squares, onPlay }) {
   const winner = calculateWinner(squares)
   let status
 
   if (winner) {
     status = 'Winner: ' + winner
-  } else {
+  } else if (!winner && !areSquaresFilled) {
     status = 'Next player: ' + (xIsNext ? 'X' : 'O')
+  } else {
+    status = 'Tie'
   }
 
-  function handleClick(i) {
+  function handleSquareClick(i) {
     if (squares[i] || calculateWinner(squares)) return
 
     const nextSquares = squares.slice()
@@ -35,31 +60,10 @@ function Board ({ xIsNext, squares, onPlay }) {
     onPlay(nextSquares)
   }
 
-  function BoardList() {
-    const rows = 3
-    const cols = 3
-
-    return (
-      <div>
-        { Array(rows).fill().map((_, rowIndex) => (
-          <div key={rowIndex} className="board-row">
-            { Array(cols).fill().map((_, colIndex) => {
-              const value = rowIndex * cols + colIndex
-
-              return (
-                <Square key={colIndex} value={squares[value]} onSquareClick={() => handleClick(value)} />
-              )
-            })}
-          </div>
-        ))}
-      </div>
-    )
-  }
-
   return (
     <>
       <div className="status">{status}</div>
-      <BoardList />
+      <BoardList squares={squares} onHandleSquareClick={handleSquareClick} />
     </>
   )
 }
@@ -69,6 +73,7 @@ export default function Game() {
   const [currentMove, setCurrentMove] = useState(0)
   const xIsNext = currentMove % 2 === 0
   const currentSquares = history[currentMove]
+  const areSquaresFilled = currentSquares.every(square => square)
 
   function handlePlay(nextSquares) {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]
@@ -103,7 +108,7 @@ export default function Game() {
   return (
     <div className="game">
       <div className="game-board">
-        <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
+        <Board areSquaresFilled={areSquaresFilled} xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
         <ol>{moves}</ol>
