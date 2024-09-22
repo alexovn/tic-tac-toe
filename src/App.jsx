@@ -4,6 +4,7 @@ import Board from "./Board"
 export default function Game() {
   const [history, setHistory] = useState([Array(9).fill(null)])
   const [currentMove, setCurrentMove] = useState(0)
+  const [movesSorting, setMovesSorting] = useState('desc')
   const xIsNext = currentMove % 2 === 0
   const currentSquares = history[currentMove]
   const areSquaresFilled = currentSquares.every(square => square)
@@ -16,6 +17,12 @@ export default function Game() {
 
   function jumpTo(nextMove) {
     setCurrentMove(nextMove)
+  }
+
+  function handleMovesSorting() {
+    movesSorting === 'desc'
+      ? setMovesSorting('asc')
+      : setMovesSorting('desc')
   }
 
   const moves = history.map((_, move) => {
@@ -38,13 +45,20 @@ export default function Game() {
     )
   })
 
+  const sortedMoves = movesSorting === 'desc'
+    ? moves.toSorted((a, b) => a.key - b.key)
+    : moves.toSorted((a, b) => b.key - a.key)
+
   return (
     <div className="game">
       <div className="game-board">
         <Board areSquaresFilled={areSquaresFilled} xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
       </div>
       <div className="game-info">
-        <ol>{moves}</ol>
+        <button onClick={handleMovesSorting}>
+          Sort moves in {movesSorting} order
+        </button>
+        <ol>{sortedMoves}</ol>
       </div>
     </div>
   )
