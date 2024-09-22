@@ -47,7 +47,7 @@ ul {
 }
 
 .square {
-  background: #fff;
+  background-color: #fff;
   border: 1px solid #999;
   float: left;
   font-size: 24px;
@@ -59,6 +59,10 @@ ul {
   padding: 0;
   text-align: center;
   width: 34px;
+}
+
+.square--winner {
+  background-color: #2ecc71;
 }
 
 .board-row:after {

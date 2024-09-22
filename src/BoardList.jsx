@@ -1,6 +1,6 @@
 import Square from "./Square"
 
-export default function BoardList({ squares, onHandleSquareClick }) {
+export default function BoardList({ squares, combination, onHandleSquareClick }) {
   const rows = 3
   const cols = 3
 
@@ -13,7 +13,7 @@ export default function BoardList({ squares, onHandleSquareClick }) {
               const value = rowIndex * cols + colIndex
 
               return (
-                <Square key={colIndex} value={squares[value]} onSquareClick={() => onHandleSquareClick(value)} />
+                <Square key={colIndex} value={squares[value]} rawValue={value} combination={combination} onSquareClick={() => onHandleSquareClick(value)} />
               )
             })
           }

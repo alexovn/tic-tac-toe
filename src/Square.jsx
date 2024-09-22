@@ -1,7 +1,9 @@
-export default function Square ({value, onSquareClick}) {
+export default function Square ({value, rawValue, combination, onSquareClick}) {
+  const isWinner = combination.includes(rawValue)
+
   return (
     <button
-      className="square"
+      className={`square ${isWinner ? 'square--winner' : ''}`}
       onClick={onSquareClick}
     >
       {value}
