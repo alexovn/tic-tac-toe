@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import calculateWinner from './utils/calculateWinner'
 import BoardList from "./BoardList"
 
@@ -15,9 +14,10 @@ export default function Board ({ areSquaresFilled, xIsNext, squares, onPlay }) {
     status = 'Tie'
   }
 
-  function handleSquareClick(i) {
+  function handleSquareClick(i, row, col) {
     if (squares[i] || winner) return
 
+    const currentSquareLoc = { row, col }
     const nextSquares = squares.slice()
 
     if (xIsNext) {
@@ -26,7 +26,7 @@ export default function Board ({ areSquaresFilled, xIsNext, squares, onPlay }) {
       nextSquares[i] = 'O'
     }
 
-    onPlay(nextSquares)
+    onPlay(nextSquares, currentSquareLoc)
   }
 
   return (

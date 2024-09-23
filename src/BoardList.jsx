@@ -13,7 +13,7 @@ export default function BoardList({ squares, combination, onHandleSquareClick })
               const value = rowIndex * cols + colIndex
 
               return (
-                <Square key={colIndex} value={squares[value]} rawValue={value} combination={combination} onSquareClick={() => onHandleSquareClick(value)} />
+                <Square key={colIndex} value={squares[value]} rawValue={value} combination={combination} onSquareClick={() => onHandleSquareClick(value, rowIndex + 1, colIndex + 1)} />
               )
             })
           }

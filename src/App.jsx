@@ -2,15 +2,18 @@ import { useState } from "react"
 import Board from "./Board"
 
 export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)])
+  const [history, setHistory] = useState([{squares: Array(9).fill(null), location: null}])
   const [currentMove, setCurrentMove] = useState(0)
   const [movesSorting, setMovesSorting] = useState('desc')
   const xIsNext = currentMove % 2 === 0
-  const currentSquares = history[currentMove]
+  const currentSquares = history[currentMove].squares
   const areSquaresFilled = currentSquares.every(square => square)
 
-  function handlePlay(nextSquares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares]
+  function handlePlay(nextSquares, currentSquareLoc) {
+    const nextHistory = [
+      ...history.slice(0, currentMove + 1),
+      ...[{squares: nextSquares, location: {row: currentSquareLoc?.row, col: currentSquareLoc?.col}}]
+    ]
     setHistory(nextHistory)
     setCurrentMove(nextHistory.length - 1)
   }
@@ -25,21 +28,23 @@ export default function Game() {
       : setMovesSorting('desc')
   }
 
-  const moves = history.map((_, move) => {
+  const moves = history.map((arr, index) => {
     let description
 
-    if (move > 0) {
-      description = 'Go to move #' + move
+    const location = `row: ${arr.location?.row}, col: ${arr.location?.col}`
+
+    if (index > 0) {
+      description = `Go to move #${index}, ${location}`
     } else {
       description = 'Go to game start'
     }
 
     return (
-      <li key={move}>
+      <li key={index}>
         { 
-          move === currentMove
-            ? <div>You are at move #{move}</div>
-            : <button onClick={() => jumpTo(move)}>{description}</button>
+          index === currentMove
+            ? <div>You are at index #{index}{ index !== 0 ? `, ${location}` : ''}</div>
+            : <button onClick={() => jumpTo(index)}>{description}</button>
         }
       </li>
     )
