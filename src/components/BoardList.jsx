@@ -1,4 +1,4 @@
-import Square from "./Square"
+import Square from "@/components/Square"
 
 export default function BoardList({ squares, combination, onHandleSquareClick }) {
   const rows = 3

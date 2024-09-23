@@ -1,5 +1,5 @@
-import calculateWinner from './utils/calculateWinner'
-import BoardList from "./BoardList"
+import calculateWinner from '../utils/calculateWinner'
+import BoardList from "@/components/BoardList"
 
 export default function Board ({ areSquaresFilled, xIsNext, squares, onPlay }) {
   const { winner, combination } = calculateWinner(squares)
