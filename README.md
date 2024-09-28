@@ -2,6 +2,8 @@
 
 It's dead simple tic-tac-toe game made on React.
 
+https://alexovn.github.io/tic-tac-toe/
+
 ## Features
 
  - Watch next player;
